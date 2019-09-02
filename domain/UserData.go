@@ -1,6 +1,6 @@
 package domain
 
-type  user_data struct {
+type UserData struct {
 	id uint64
 	username string
 	password string
