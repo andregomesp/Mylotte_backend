@@ -1,45 +1,30 @@
-package main
+package connections
 
 import (
+	"../controllers"
 	"net/url"
 	"strings"
 )
 
+var urlMappings = map[string]interface{} {
+	"/lot/get": controllers.LotGet,
+	"/category/get": controllers.CategoryGet,
+}
+
+func dynamicCall(name string, params map[string]interface{}, urlParams map[string]interface{}) map[string]interface{} {
+	return urlMappings[name].(func(params map[string]interface{}, urlParams map[string]interface{}) map[string]interface{})(params, urlParams)
+}
+
 func getPathAndParametersFromUrl (completeUrl string) (string, string) {
 	u, err := url.Parse(completeUrl)
-	if err != nil {
-		panic(err)
-	}
+	if err != nil {panic(err)}
 	URIstrings := strings.Split(u.RequestURI(), "?")
+	println(URIstrings)
 	if len(URIstrings) > 2 {
 		panic("There are more than one '?' symbols on the URI")
 	}
-	return URIstrings[0], URIstrings[1]
-}
-
-func initializeUrlMaps() map[string]map[string]map[string]string {
-	//Uses first map key to represent the url and the second one are function and method
-	controllers := []string {"lot"}
-	urlMaps := map[string]map[string]map[string]string {}
-	for _, controller := range controllers {
-		controllerMap := map[string]map[string]string {
-			"get": {
-				"": "get",
-			},
-			"list": {
-				"": "list",
-			},
-			"post": {
-				"": "post",
-			},
-			"put": {
-				"": "put",
-			},
-			"delete": {
-				"": "delete",
-			},
-		}
-		urlMaps[controller] = controllerMap
+	if len(URIstrings) == 1 {
+		URIstrings = append(URIstrings, "")
 	}
-	return urlMaps
+	return URIstrings[0], URIstrings[1]
 }

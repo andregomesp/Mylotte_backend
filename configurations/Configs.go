@@ -1,10 +1,9 @@
 package configurations
 
 import (
-	"reflect"
 	L "../tools"
+	"reflect"
 	"strings"
-
 )
 
 type Configs struct {
