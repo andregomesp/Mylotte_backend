@@ -2,6 +2,7 @@ package connections
 
 import (
 	"../configurations"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -11,8 +12,6 @@ import (
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	path, urlParams := getPathAndParametersFromUrl(r.RequestURI)
-	println(urlParams)
-	println(path)
 	urlParameterMap := constructUrlParameterMap(urlParams)
 	paramsMap := constructParameterMap(r.Body)
 	dynamicCall(path, paramsMap, urlParameterMap)
@@ -21,10 +20,11 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 func constructParameterMap(body io.ReadCloser) map[string]interface{} {
 	paramsMap := make(map[string]interface{})
-	json, err := ioutil.ReadAll(body)
+	var paramsInterface interface{}
+	jsonBytes, err := ioutil.ReadAll(body)
 	if err != nil {panic(err)}
-	jsonString := string(json)
-	println(jsonString)
+	err = json.Unmarshal(jsonBytes, &paramsInterface)
+	paramsMap["json"] = paramsInterface
 	return paramsMap
 }
 
