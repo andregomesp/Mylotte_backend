@@ -22,7 +22,9 @@ func constructParameterMap(body io.ReadCloser) map[string]interface{} {
 	paramsMap := make(map[string]interface{})
 	var paramsInterface interface{}
 	jsonBytes, err := ioutil.ReadAll(body)
-	if err != nil {panic(err)}
+	if err != nil {
+		panic(err)
+	}
 	err = json.Unmarshal(jsonBytes, &paramsInterface)
 	paramsMap["json"] = paramsInterface
 	return paramsMap
@@ -43,7 +45,5 @@ func constructUrlParameterMap(urlParams string) map[string]interface{} {
 
 func StartListening(configs configurations.Configs) {
 	http.HandleFunc("/", handler)
-	_ = http.ListenAndServe(":" + configs.Port, nil)
+	_ = http.ListenAndServe(":"+configs.Port, nil)
 }
-
-

@@ -6,15 +6,26 @@ import (
 	"log"
 )
 
+var backgroundCtx = context.Background()
+var dbConnection = createDBConnection()
 
-func PrepareContext(db *sql.DB) {
-	ctx, cancel :=
+func PrepareDB() *sql.Tx {
+	isAlive := checkIfConnectionIsStillAlive(dbConnection)
+	if isAlive == false {
+		dbConnection = createDBConnection()
+	}
+	return CreateTransaction(dbConnection)
 }
 
 func CreateTransaction(db *sql.DB) *sql.Tx {
-
-	tx, err := db.BeginTx(ctx, &sql.TxOptions{Isolation: sql.LevelSerializable})
-	if err != nil {panic(err)}
+	ctx, err := context.WithTimeout(backgroundCtx, 15000000000)
+	if err != nil {
+		panic(err)
+	}
+	tx, error := db.BeginTx(ctx, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if error != nil {
+		panic(error)
+	}
 	return tx
 }
 
