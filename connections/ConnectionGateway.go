@@ -14,8 +14,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	path, urlParams := getPathAndParametersFromUrl(r.RequestURI)
 	urlParameterMap := constructUrlParameterMap(urlParams)
 	paramsMap := constructParameterMap(r.Body)
-	dynamicCall(path, paramsMap, urlParameterMap)
-	_, _ = fmt.Fprintf(w, "Hi, your message is : %s!", r.URL.Path[1:])
+	result := dynamicCall(path, paramsMap, urlParameterMap)
+	jsonData, err := json.Marshal(result)
+	if err != nil {
+		panic(err)
+	}
+	_, _ = fmt.Fprintf(w, string(jsonData))
 }
 
 func constructParameterMap(body io.ReadCloser) map[string]interface{} {
@@ -27,6 +31,9 @@ func constructParameterMap(body io.ReadCloser) map[string]interface{} {
 	}
 	err = json.Unmarshal(jsonBytes, &paramsInterface)
 	paramsMap["json"] = paramsInterface
+	if paramsMap["json"] == nil {
+		paramsMap["json"] = ""
+	}
 	return paramsMap
 }
 
@@ -40,6 +47,7 @@ func constructUrlParameterMap(urlParams string) map[string]interface{} {
 			urlParamsMap[key] = value
 		}
 	}
+
 	return urlParamsMap
 }
 

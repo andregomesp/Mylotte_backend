@@ -6,8 +6,8 @@ import (
 	"strings"
 )
 
-var urlMappings = map[string]interface{} {
-	"/lot/get": controllers.LotGet,
+var urlMappings = map[string]interface{}{
+	"/lot/get":      controllers.LotGet,
 	"/category/get": controllers.CategoryGet,
 }
 
@@ -15,9 +15,11 @@ func dynamicCall(name string, params map[string]interface{}, urlParams map[strin
 	return urlMappings[name].(func(params map[string]interface{}, urlParams map[string]interface{}) map[string]interface{})(params, urlParams)
 }
 
-func getPathAndParametersFromUrl (completeUrl string) (string, string) {
+func getPathAndParametersFromUrl(completeUrl string) (string, string) {
 	u, err := url.Parse(completeUrl)
-	if err != nil {panic(err)}
+	if err != nil {
+		panic(err)
+	}
 	URIstrings := strings.Split(u.RequestURI(), "?")
 	println(URIstrings)
 	if len(URIstrings) > 2 {
