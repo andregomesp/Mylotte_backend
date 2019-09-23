@@ -1,30 +1,31 @@
 package connections
 
 import (
+	"../database"
 	"context"
 	"database/sql"
 	"log"
 )
 
-var backgroundCtx = context.Background()
-var dbConnection = createDBConnection()
+var BackgroundCtx = context.Background()
+var dbConnection = database.CreateDBConnection()
 
-func PrepareDB() *sql.Tx {
-	isAlive := checkIfConnectionIsStillAlive(dbConnection)
+func PrepareDBTransaction() *sql.Tx {
+	isAlive := database.CheckIfConnectionIsStillAlive(dbConnection)
 	if isAlive == false {
-		dbConnection = createDBConnection()
+		dbConnection = database.CreateDBConnection()
 	}
 	return CreateTransaction(dbConnection)
 }
 
 func CreateTransaction(db *sql.DB) *sql.Tx {
-	ctx, err := context.WithTimeout(backgroundCtx, 15000000000)
+	ctx, err := context.WithTimeout(BackgroundCtx, 15000000000)
 	if err != nil {
 		panic(err)
 	}
-	tx, error := db.BeginTx(ctx, &sql.TxOptions{Isolation: sql.LevelSerializable})
-	if error != nil {
-		panic(error)
+	tx, err2 := db.BeginTx(ctx, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err2 != nil {
+		panic(err2)
 	}
 	return tx
 }
