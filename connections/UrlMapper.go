@@ -21,7 +21,6 @@ func getPathAndParametersFromUrl(completeUrl string) (string, string) {
 		panic(err)
 	}
 	URIstrings := strings.Split(u.RequestURI(), "?")
-	println(URIstrings)
 	if len(URIstrings) > 2 {
 		panic("There are more than one '?' symbols on the URI")
 	}

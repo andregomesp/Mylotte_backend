@@ -6,8 +6,6 @@ import (
 )
 
 func LotGet(params map[string]interface{}, urlParams map[string]interface{}) map[string]interface{} {
-	println(params)
-	println(urlParams)
 	lot := domain.Lot{}
 	commands.Get(lot, 1)
 	returnMap := make(map[string]interface{})

@@ -1,19 +1,18 @@
-package connections
+package database
 
 import (
-	"../database"
 	"context"
 	"database/sql"
 	"log"
 )
 
 var BackgroundCtx = context.Background()
-var dbConnection = database.CreateDBConnection()
+var dbConnection = CreateDBConnection()
 
 func PrepareDBTransaction() *sql.Tx {
-	isAlive := database.CheckIfConnectionIsStillAlive(dbConnection)
+	isAlive := CheckIfConnectionIsStillAlive(dbConnection)
 	if isAlive == false {
-		dbConnection = database.CreateDBConnection()
+		dbConnection = CreateDBConnection()
 	}
 	return CreateTransaction(dbConnection)
 }
