@@ -14,6 +14,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	path, urlParams := getPathAndParametersFromUrl(r.RequestURI)
 	urlParameterMap := constructUrlParameterMap(urlParams)
 	paramsMap := constructParameterMap(r.Body)
+	path = r.Method + path
 	result := dynamicCall(path, paramsMap, urlParameterMap)
 	jsonData, err := json.Marshal(result)
 	if err != nil {
@@ -46,6 +47,8 @@ func constructUrlParameterMap(urlParams string) map[string]interface{} {
 			key, value := keyAndValue[0], keyAndValue[1]
 			urlParamsMap[key] = value
 		}
+	} else {
+		urlParamsMap[""] = ""
 	}
 
 	return urlParamsMap

@@ -7,8 +7,8 @@ import (
 )
 
 var urlMappings = map[string]interface{}{
-	"/lot/get":      controllers.LotGet,
-	"/category/get": controllers.CategoryGet,
+	"GET/lot":      controllers.LotGet,
+	"GET/category": controllers.CategoryGet,
 }
 
 func dynamicCall(name string, params map[string]interface{}, urlParams map[string]interface{}) map[string]interface{} {

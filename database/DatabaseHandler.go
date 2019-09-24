@@ -18,10 +18,7 @@ func PrepareDBTransaction() *sql.Tx {
 }
 
 func CreateTransaction(db *sql.DB) *sql.Tx {
-	ctx, err := context.WithTimeout(BackgroundCtx, 15000000000)
-	if err != nil {
-		panic(err)
-	}
+	ctx, _ := context.WithTimeout(BackgroundCtx, 60000000000)
 	tx, err2 := db.BeginTx(ctx, &sql.TxOptions{Isolation: sql.LevelSerializable})
 	if err2 != nil {
 		panic(err2)
