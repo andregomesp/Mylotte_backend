@@ -1,7 +1,11 @@
 package mylotte_backend
 
-class HistoryProduct {
+import java.time.LocalDate
 
+class HistoryProduct {
+    LocalDate registerDate
+    Float price
+    Product product
     static constraints = {
     }
 }

@@ -5,6 +5,8 @@ import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import grails.compiler.GrailsCompileStatic
 
+import java.time.LocalDate
+
 @GrailsCompileStatic
 @EqualsAndHashCode(includes='username')
 @ToString(includes='username', includeNames=true, includePackage=false)
@@ -16,6 +18,10 @@ class User implements Serializable {
 
 	String username
 	String password
+	String email
+	LocalDate birthDate
+	Boolean isEnabled
+	Boolean isVerified
 	boolean enabled = true
 	boolean accountExpired
 	boolean accountLocked
