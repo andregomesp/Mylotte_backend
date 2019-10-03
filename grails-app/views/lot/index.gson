@@ -1,8 +1,0 @@
-import mylotte_backend.Lot
-
-model {
-	Iterable<Lot> lotList
-}
-
-json tmpl.lot(lotList ?: [])
-

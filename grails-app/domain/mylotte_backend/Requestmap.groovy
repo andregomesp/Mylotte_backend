@@ -9,7 +9,7 @@ import grails.compiler.GrailsCompileStatic
 @GrailsCompileStatic
 @EqualsAndHashCode(includes=['configAttribute', 'httpMethod', 'url'])
 @ToString(includes=['configAttribute', 'httpMethod', 'url'], cache=true, includeNames=true, includePackage=false)
-class Requestmap implements Serializable {
+class RequestMap implements Serializable {
 
 	private static final long serialVersionUID = 1
 
@@ -25,5 +25,10 @@ class Requestmap implements Serializable {
 
 	static mapping = {
 		cache true
+//		id generator:'sequence', params:[sequence:'req_map_seq']
+	}
+
+	def criarRegras() {
+		//Implementar as regras após todas estarem bem definidas
 	}
 }

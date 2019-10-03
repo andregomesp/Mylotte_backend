@@ -2,7 +2,7 @@
 grails:
     profile: rest-api
     codegen:
-        defaultPackage: mylotte_backend
+        defaultPackage: mylotte
     gorm:
         reactor:
             # Whether to translate GORM events into Reactor events
@@ -14,25 +14,17 @@ info:
         version: '@info.app.version@'
         grailsVersion: '@info.app.grailsVersion@'
 spring:
-    jmx:
-        unique-names: true
     main:
         banner-mode: "off"
     groovy:
         template:
             check-template-location: false
-    devtools:
-        restart:
-            additional-exclude:
-                - '*.gsp'
-                - '**/*.gsp'
-                - '*.gson'
-                - '**/*.gson'
-                - 'logback.groovy'
-                - '*.properties'
-management:
-    endpoints:
-        enabled-by-default: false
+
+# Spring Actuator Endpoints are Disabled by Default
+endpoints:
+    enabled: false
+    jmx:
+        enabled: true
 
 ---
 grails:
@@ -79,15 +71,15 @@ hibernate:
 dataSource:
     pooled: true
     jmxExport: true
-    driverClassName: org.postgresql.Driver
-    username: utproodmdnwuav
-    password: 2015c03801e4802587b0f5ca24d50864911c9931ede6204275c1912e2191a759
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ''
 
 environments:
     development:
         dataSource:
-            dbCreate: update
-            url: jdbc:postgresql://ec2-23-21-91-183.compute-1.amazonaws.com:5432/d5fbhblu8un6fn
+            dbCreate: create-drop
+            url: jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
     test:
         dataSource:
             dbCreate: update

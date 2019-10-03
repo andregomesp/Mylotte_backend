@@ -1,4 +1,4 @@
-package mylotte_backend
+package mylotte
 
 import grails.core.GrailsApplication
 import grails.plugins.*

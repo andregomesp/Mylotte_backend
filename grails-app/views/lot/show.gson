@@ -1,7 +1,0 @@
-import mylotte_backend.Lot
-
-model {
-	Lot lot
-}
-
-json tmpl.lot(lot)
