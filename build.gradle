@@ -4,14 +4,14 @@ buildscript {
         maven { url "https://repo.grails.org/grails/core" }
     }
     dependencies {
-        classpath "org.grails:grails-gradle-plugin:$grailsVersion"
+        classpath "org.grails:grails-gradle-plugin:3.3.5"
         classpath "org.grails.plugins:hibernate5:${gormVersion-".RELEASE"}"
         classpath "org.grails.plugins:views-gradle:1.1.6"
     }
 }
 
 version "0.1"
-group "mylotte"
+group "mylotte_backend"
 
 apply plugin:"eclipse"
 apply plugin:"idea"
@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-        compile group: 'org.postgresql', name: 'postgresql', version: '42.2.1'
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
     compile "org.grails.plugins:spring-security-rest:2.0.0.RC1"
     compile group: 'org.grails', name: 'grails-datastore-rest-client', version: '6.1.9.RELEASE'
     compile "org.springframework.boot:spring-boot-starter-logging"
@@ -68,11 +68,4 @@ bootRun {
     addResources = true
     String springProfilesActive = 'spring.profiles.active'
     systemProperty springProfilesActive, System.getProperty(springProfilesActive)
-}
-
-tasks.withType(Test) {
-    systemProperty "geb.env", System.getProperty('geb.env')
-    systemProperty "geb.build.reportsDir", reporting.file("geb/integrationTest")
-    systemProperty "webdriver.chrome.driver", System.getProperty('webdriver.chrome.driver')
-    systemProperty "webdriver.gecko.driver", System.getProperty('webdriver.gecko.driver')
 }

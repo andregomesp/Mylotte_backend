@@ -6,8 +6,8 @@ class Lot {
     String typeOfLot
     String currentQuantity
     String totalQuantity
-    String unitPrice
-    String totalPrice
+    Float unitPrice
+    Float totalPrice
     String status
     LocalDate openingDate
     LocalDate closingDate

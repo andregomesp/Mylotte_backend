@@ -11,8 +11,7 @@ grails.plugin.springsecurity.securityConfigType = 'Requestmap'
 grails.plugin.springsecurity.rest.token.validation.enableAnonymousAccess = true
 grails.plugin.springsecurity.filterChain.chainMap = [
     // start open URLS: these urls are inside api but are open to not authenticated users
-    [pattern: '/api/login/', filters:'anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor'],
-    [pattern: '/api/usuario/oauth/**', filters:'anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor'],
+    [pattern: '/api/login', filters:'anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor'],
     [pattern: '/login/auth', filters:'anonymousAuthenticationFilter'],
     [pattern: '/oauth/access_token', filters:'anonymousAuthenticationFilter,securityRequestHolderFilter,securityContextPersistenceFilter,securityContextHolderAwareRequestFilter'],
     [pattern: '/oauth/authenticate/google', filters:'anonymousAuthenticationFilter,securityRequestHolderFilter,securityContextPersistenceFilter,securityContextHolderAwareRequestFilter'],
@@ -20,7 +19,8 @@ grails.plugin.springsecurity.filterChain.chainMap = [
     // end open URLS
 
     // start main urls
-    [pattern: '/api/**', filters:'JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter'],
+    [pattern: '/api/**', filters:'none'],
+    // [pattern: '/api/**', filters:'JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter'],
     // [pattern: '/**', filters:'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter']
     [pattern: '/**', filters:'none']
     // End main URLS
@@ -32,5 +32,4 @@ grails.plugin.springsecurity.rest.token.validation.headerName = 'Authorization'
 grails.plugin.springsecurity.rest.token.rendering.tokenPropertyName = "access_token"
 grails.plugin.springsecurity.rest.token.storage.useGorm = true
 grails.plugin.springsecurity.rest.token.storage.gorm.tokenDomainClassName = 'mylotte_backend.AuthenticationToken'
-
 
