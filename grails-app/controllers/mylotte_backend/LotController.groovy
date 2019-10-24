@@ -20,6 +20,10 @@ class LotController {
         }
     }
 
+    def getAllInterestedCompanies() {
+
+    }
+
     def delete() {
         Lot lot = Lot.get(params.id as long)
         try {
@@ -67,6 +71,12 @@ class LotController {
         lotCompany.company = company
         lotCompany.offeredPrice = json.offeredPrice
         lotCompany.offeredQuantity = json.offeredQuantity
+        if (lot.typeOfLot == "COMPRA" && (lot.currentQuantity + lotCompany.offeredQuantity > lot.totalQuantity)) {
+            throw new Error("Quantidade ofertada maior que quantidade disponivel")
+        }
+        if (lot.status == "CLOSED") {
+            throw new Error("Lote fechado")
+        }
         try {
             lotCompany.save(failOnError: true)
             respond lotCompany
@@ -79,7 +89,7 @@ class LotController {
         def json = request.JSON
         Company company = Company.get(json.companyId as long)
         Lot lot = Lot.get(json.lotId as long)
-        LotCompany lotCompany = LotCompany.findAllByLotAndCompany(lot, company)
+        LotCompany lotCompany = LotCompany.findByLotAndCompany(lot, company)
         try {
             lotCompany.delete(failOnError: true)
             response.status = 204

@@ -83,11 +83,11 @@ environments:
     test:
         dataSource:
             dbCreate: update
-            url: jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+            url: jdbc:postgresql://ec2-23-21-91-183.compute-1.amazonaws.com:5432/d5fbhblu8un6fn
     production:
         dataSource:
-            dbCreate: none
-            url: jdbc:h2:./prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+            dbCreate: update
+            url: jdbc:postgresql://ec2-23-21-91-183.compute-1.amazonaws.com:5432/d5fbhblu8un6fn
             properties:
                 jmxEnabled: true
                 initialSize: 5
