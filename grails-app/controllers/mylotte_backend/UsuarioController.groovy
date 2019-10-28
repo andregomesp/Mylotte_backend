@@ -41,7 +41,7 @@ class UsuarioController {
         entity.password = springSecurityService.encodePassword(entity.password)
         try {
             entity.save(failOnError: true)
-            if (entity.member) {
+            if (metod === "PUT") {
                 entity.member.properties = json
             } else {
                 Member member = new Member(cpf: json.cpf, telephone: json.telephone, user: entity)
@@ -51,6 +51,10 @@ class UsuarioController {
                 }
                 member.save(failOnError: true)
                 entity.member = member
+                Autoridade autoridade = new Autoridade(authority: "ROLE_CLIENTE")
+                autoridade.save(failOnError: true)
+                UsuarioAutoridade ua = new UsuarioAutoridade(usuario: entity, autoridade: autoridade)
+                ua.save(failOnError: true)
             }
             Map response = [nome: entity.nome, sobrenome: entity.sobrenome, email: entity.email]
             respond response
