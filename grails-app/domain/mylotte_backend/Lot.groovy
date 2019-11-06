@@ -1,7 +1,5 @@
 package mylotte_backend
 
-import java.time.LocalDate
-
 class Lot {
     String typeOfLot
     String currentQuantity
@@ -9,10 +7,11 @@ class Lot {
     Float unitPrice
     Float totalPrice
     String status
-    LocalDate openingDate
-    LocalDate closingDate
-    LocalDate expirationDate
+    Date openingDate
+    Date closingDate
+    Date expirationDate
     Boolean isPriceBalanced
+    Product product
 
     static constraints = {
     }

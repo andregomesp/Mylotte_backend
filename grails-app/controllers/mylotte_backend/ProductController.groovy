@@ -25,7 +25,7 @@ class ProductController {
             response.status = 204
             respond {}
         } catch (Exception e) {
-            respond e.message
+             respond(error: e.message)
         }
     }
 
@@ -42,7 +42,7 @@ class ProductController {
         try {
             entity.save(failOnError: true)
         } catch (Exception e) {
-            respond e.message
+             respond(error: e.message)
         }
     }
 

@@ -1,10 +1,12 @@
 package mylotte_backend
 
+import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.SpringSecurityService
 import mylotte_backend.Company
 import mylotte_backend.Lot
 import mylotte_backend.LotCompany
-
+import java.text.SimpleDateFormat
+@Transactional
 class LotController {
 	static responseFormats = ['json', 'xml']
 
@@ -31,35 +33,34 @@ class LotController {
             response.status = 204
             respond {}
         } catch (Exception e) {
-            respond e.message
+             respond(error: e.message)
         }
     }
 
-    def save() {
-        def json = request.JSON
-        Lot lot = new Lot()
+    def process_entity(Lot lot, def json) {
         try {
             lot.properties = json
             Company company = Company.get(json.companyId as long)
             company.addToLots(lot)
+            lot.totalPrice = lot.unitPrice.toFloat() * lot.totalQuantity.toInteger()
+            lot.openingDate = new SimpleDateFormat("yy-MM-dddd HH:mm:SS.SSS").parse(json.openingDate as String)
+            lot.closingDate = new SimpleDateFormat("yy-MM-dddd HH:mm:SS.SSS").parse(json.closingDate as String)
+            lot.expirationDate = new SimpleDateFormat("yy-MM-dddd HH:mm:SS.SSS").parse(json.expirationDate as String)
+            println(lot.openingDate)
             lot.save(failOnError: true)
             company.save(failOnError: true)
             respond lot
         } catch (Exception e) {
-            respond e.message
+            respond(error: e.message)
         }
     }
 
+    def save() {
+        process_entity(new Lot(), request.JSON)
+    }
+
     def edit() {
-        def json = request.JSON
-        Lot lot = Lot.get(json.id as long)
-        try {
-            lot.properties = json
-            lot.save(failOnError: true)
-            respond lot
-        } catch (Exception e) {
-            respond e.message
-        }
+        process_entity(Lot.get(json.id as long), request.JSON)
     }
 
     def enterLot() {
@@ -81,7 +82,7 @@ class LotController {
             lotCompany.save(failOnError: true)
             respond lotCompany
         } catch (Exception e) {
-            respond e.message
+             respond(error: e.message)
         }
     }
 
@@ -95,7 +96,7 @@ class LotController {
             response.status = 204
             respond {}
         } catch (Exception e) {
-            respond e.message
+             respond(error: e.message)
         }
     }
 }

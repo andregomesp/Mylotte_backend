@@ -29,7 +29,7 @@ class UsuarioController {
             response.status = 204
             respond {}
         } catch (Exception e) {
-            respond e.message
+             respond(error: e.message)
         }
     }
 
@@ -41,7 +41,7 @@ class UsuarioController {
         entity.password = springSecurityService.encodePassword(entity.password)
         try {
             entity.save(failOnError: true)
-            if (metod === "PUT") {
+            if (metod == "PUT") {
                 entity.member.properties = json
             } else {
                 Member member = new Member(cpf: json.cpf, telephone: json.telephone, user: entity)
@@ -60,7 +60,7 @@ class UsuarioController {
             respond response
         } catch (Exception e) {
             transactionStatus.setRollbackOnly()
-            respond e.message
+             respond(error: e.message)
         }
     }
 

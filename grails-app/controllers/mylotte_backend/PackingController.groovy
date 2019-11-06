@@ -27,7 +27,7 @@ class PackingController {
             response.status = 204
             respond {}
         } catch (Exception e) {
-            respond e.message
+             respond(error: e.message)
         }
     }
 
@@ -41,7 +41,7 @@ class PackingController {
             respond entity
         } catch (Exception e) {
             transactionStatus.setRollbackOnly()
-            respond e.message
+             respond(error: e.message)
         }
     }
 
