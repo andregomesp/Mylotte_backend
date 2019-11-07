@@ -41,17 +41,13 @@ class UsuarioController {
         entity.password = springSecurityService.encodePassword(entity.password)
         try {
             entity.save(failOnError: true)
-            if (metod == "PUT") {
+            if (method == "PUT") {
                 entity.member.properties = json
             } else {
-                Member member = new Member(cpf: json.cpf, telephone: json.telephone, user: entity)
-                json.companies.each { it ->
-                    Company company = Company.get(it as long)
-                    entity.member.addToCompanies(company)
-                }
+                Member member = new Member(cpf: json.cpf, telephone: json.telephone, user: entity, company: Company.get(json.companyId as long))
                 member.save(failOnError: true)
                 entity.member = member
-                Autoridade autoridade = new Autoridade(authority: "ROLE_CLIENTE")
+                Autoridade autoridade = Autoridade.findByAuthority("ROLE_USER")
                 autoridade.save(failOnError: true)
                 UsuarioAutoridade ua = new UsuarioAutoridade(usuario: entity, autoridade: autoridade)
                 ua.save(failOnError: true)

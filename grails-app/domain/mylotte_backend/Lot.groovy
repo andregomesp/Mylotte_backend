@@ -2,8 +2,8 @@ package mylotte_backend
 
 class Lot {
     String typeOfLot
-    String currentQuantity
-    String totalQuantity
+    Integer currentQuantity
+    Integer totalQuantity
     Float unitPrice
     Float totalPrice
     String status
@@ -12,7 +12,7 @@ class Lot {
     Date expirationDate
     Boolean isPriceBalanced
     Product product
-
+    static belongsTo = [ownerCompany: Company] //lot owner
     static constraints = {
     }
 }

@@ -4,7 +4,7 @@ class Product {
     String name
     String manufacturer
     Float measure
-    Float measureType
+    String measureType
     static hasMany = [categories: Category, packings: Packing]
     static belongsTo = [Category]
     static constraints = {
