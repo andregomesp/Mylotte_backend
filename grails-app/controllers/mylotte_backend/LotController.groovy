@@ -18,8 +18,29 @@ class LotController {
             respond Lot.get(params.id as long)
         } else {
             def max = Math.min(params.max ?: 10, 100)
-            def list = Lot.createCriteria().list(max: max, offset: params.offset) {query}
-            respond "entities": list, "total": Lot.count
+            List<Lot> list = Lot.createCriteria().list(max: max, offset: params.offset) {query}
+            def new_list = []
+            list.each { lot -> 
+                Map el = [:]
+                el.currentQuantity = lot.currentQuantity
+                el.totalQuantity = lot.totalQuantity
+                el.ownerCompany = [:]
+                el.ownerCompany["id"] = lot.ownerCompany.id
+                el.unitPrice = lot.unitPrice
+                el.totalPrice = lot.totalPrice
+                el.product = [:]
+                el.product["name"] = lot.product.name
+                el.product["manufacturer"] = lot.product.manufacturer
+                el.openingDate = lot.openingDate
+                el.closingDate = lot.closingDate
+                el.expirationDate = lot.expirationDate
+                el.status = lot.status
+                el.isPriceBalanced = lot.isPriceBalanced
+                el.typeOfLot = lot.typeOfLot
+                new_list.add(el)
+            }
+            println(new_list)
+            respond "entities": new_list, "total": Lot.count
         }
     }
 

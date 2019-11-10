@@ -15,4 +15,7 @@ class Lot {
     static belongsTo = [ownerCompany: Company] //lot owner
     static constraints = {
     }
+
+    static mapping = {
+    }
 }
