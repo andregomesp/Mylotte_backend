@@ -12,7 +12,7 @@ class UrlMappings {
         "500"(view: '/error')
         "404"(view: '/notFound')
 
-        "/api/enterLot"(controller: 'lot', action: 'enterLot')
-        "/api/exitLot"(controller: 'lot', action: 'exitLot')
+        "/api/lot/enterLot/"(controller: 'lot', action: 'enterLot', method: 'POST')
+        "/api/lot/exitLot/"(controller: 'lot', action: 'exitLot', method: 'DELETE')
     }
 }

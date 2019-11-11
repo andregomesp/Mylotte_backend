@@ -22,6 +22,7 @@ class LotController {
             def new_list = []
             list.each { lot -> 
                 Map el = [:]
+                el.id = lot.id
                 el.currentQuantity = lot.currentQuantity
                 el.totalQuantity = lot.totalQuantity
                 el.ownerCompany = [:]
@@ -39,7 +40,6 @@ class LotController {
                 el.typeOfLot = lot.typeOfLot
                 new_list.add(el)
             }
-            println(new_list)
             respond "entities": new_list, "total": Lot.count
         }
     }
@@ -63,7 +63,6 @@ class LotController {
         try {
             lot.properties = json
             Usuario user = springSecurityService.getCurrentUser()
-            println(user.member)
             Set<Member> members = [user.member]
             Company company = user.member.company
             lot.ownerCompany = company
@@ -90,6 +89,7 @@ class LotController {
 
     def enterLot() {
         def json = request.JSON
+        println(json)
         Company company = Company.get(json.companyId as long)
         Lot lot = Lot.get(json.lotId as long)
         LotCompany lotCompany = new LotCompany()
