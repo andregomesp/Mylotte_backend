@@ -11,7 +11,7 @@ class UrlMappings {
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')
         "404"(view: '/notFound')
-
+        "/api/lot/getMyLottes/"(controller: 'lot', action: 'getMyLottes', method: 'GET')
         "/api/lot/enterLot/"(controller: 'lot', action: 'enterLot', method: 'POST')
         "/api/lot/exitLot/"(controller: 'lot', action: 'exitLot', method: 'DELETE')
     }
