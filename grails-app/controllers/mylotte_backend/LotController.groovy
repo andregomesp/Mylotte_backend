@@ -12,15 +12,20 @@ class LotController {
     static responseFormats = ['json', 'xml']
 
     def index() {
-        def query = {}
+        def new_list = []
         if (params.id) {
             respond Lot.get(params.id as long)
         } else {
             def max = Math.min(params.max ?: 10, 100)
-            List<Lot> list = Lot.createCriteria().list(max: max, offset: params.offset) {query} as List<Lot>
-            def new_list = toJsonLot(list)
-            respond "entities": new_list, "total": Lot.count
+            if (params.type == "COMPRA") {
+                List<Lot> list = Lot.createCriteria().list(max: max, offset: params.offset) {eq("typeOfLot", "COMPRA")} as List<Lot>
+                new_list = Lot.toJsonLot(list)
+            } else if (params.type == "VENDA") {
+                List<Lot> list = Lot.createCriteria().list(max: max, offset: params.offset) {eq("typeOfLot", "VENDA")} as List<Lot>
+                new_list = Lot.toJsonVendasLot(list)
+            }
         }
+        respond "entities": new_list
     }
 
     def getMyLottes() {
@@ -31,60 +36,9 @@ class LotController {
                 eq("id", user.member.company.id)
             }
         } as List<LotCompany>
-        def new_list = toJsonMyOwnLot(list)
+        def new_list = Lot.toJsonMyOwnLot(list)
         respond "entities": new_list
     }
-
-    def toJsonLot(def list) {
-        def new_list = []
-        list.each { lot ->
-            Map el = [:]
-            def ownedQuantity = 0
-            List<LotCompany> lotCompanies = LotCompany.findAllByLot(lot)
-            lotCompanies.each {
-                ownedQuantity += it.offeredQuantity
-            }
-            el.id = lot.id
-            el.ownedQuantity = ownedQuantity
-            el.currentQuantity = lot.currentQuantity
-            el.totalQuantity = lot.totalQuantity
-            el.ownerCompany = [:]
-            el.ownerCompany["id"] = lot.ownerCompany.id
-            el.ownerCompany["socialName"] = lot.ownerCompany.socialName
-            el.unitPrice = lot.unitPrice
-            el.totalPrice = lot.totalPrice
-            el.product = [:]
-            el.product["name"] = lot.product.name
-            el.product["manufacturer"] = lot.product.manufacturer
-            el.openingDate = lot.openingDate
-            el.closingDate = lot.closingDate
-            el.expirationDate = lot.expirationDate
-            el.status = lot.status
-            el.isPriceBalanced = lot.isPriceBalanced
-            el.typeOfLot = lot.typeOfLot
-            new_list.add(el)
-        }
-        return new_list
-    }
-
-    def toJsonMyOwnLot(def list) {
-        def new_list = []
-        list.each { lotCompany ->
-            Map el = [:]
-            el.id = lotCompany.id
-            el.offeredPrice = lotCompany.offeredPrice
-            el.offeredQuantity = lotCompany.offeredQuantity
-            el.ownerCompany = [:]
-            el.ownerCompany["id"] = lotCompany.lot.ownerCompany.id
-            el.ownerCompany["socialName"] = lotCompany.lot.ownerCompany.socialName
-            el.product = [:]
-            el.product["name"] = lotCompany.lot.product.name
-            el.product["manufacturer"] = lotCompany.lot.product.manufacturer
-            new_list.add(el)
-        }
-        return new_list
-    }
-
 
     def getAllInterestedCompanies() {
 
@@ -129,10 +83,27 @@ class LotController {
         process_entity(Lot.get(json.id as long), request.JSON)
     }
 
+    def enterLotVenda() {
+        def json = request.JSON
+        Usuario user = springSecurityService.getCurrentUser() as Usuario
+        LotCompany lotCompany = new LotCompany()
+        lotCompany.lot = Lot.get(json.lotId as long)
+        lotCompany.company = user.member.company
+        lotCompany.offeredPrice = json.offeredPrice
+        lotCompany.offeredQuantity = lot.totalQuantity
+        lotCompany.balancedPrice = json.offeredPrice
+        try {
+            lotCompany.save(failOnError: true)
+            respond lotCompany
+        } catch (Exception e) {
+            respond(error: e.message)
+        }
+    }
+
     def enterLot() {
         def json = request.JSON
-        println(json)
-        Company company = Company.get(json.companyId as long)
+        Usuario user = springSecurityService.getCurrentUser() as Usuario
+        Company company = user.member.company
         Lot lot = Lot.get(json.lotId as long)
         LotCompany lotCompany = new LotCompany()
         lotCompany.lot = lot
